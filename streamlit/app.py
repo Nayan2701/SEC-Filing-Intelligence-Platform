@@ -16,14 +16,13 @@ st.set_page_config(
 # ── Snowflake connection ──────────────────────────────────────────────────────
 @st.cache_resource
 def get_connection():
-    try:
-        user = os.environ["SNOWFLAKE_USER"]
-        password = os.environ["SNOWFLAKE_PASSWORD"]
-        account = os.environ["SNOWFLAKE_ACCOUNT"]
-    except KeyError:
-        user = st.secrets["snowflake"]["user"]
+    user     = os.environ.get("SNOWFLAKE_USER")
+    password = os.environ.get("SNOWFLAKE_PASSWORD")
+    account  = os.environ.get("SNOWFLAKE_ACCOUNT")
+    if not user:
+        user     = st.secrets["snowflake"]["user"]
         password = st.secrets["snowflake"]["password"]
-        account = st.secrets["snowflake"]["account"]
+        account  = st.secrets["snowflake"]["account"]
     return snowflake.connector.connect(
         user=user,
         password=password,
